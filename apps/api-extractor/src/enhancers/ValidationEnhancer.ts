@@ -232,18 +232,18 @@ export class ValidationEnhancer {
         continue;
       }
 
-      if (collectorEntity && collectorEntity.consumable) {
-        if (ReleaseTag.compare(declarationReleaseTag, referencedReleaseTag) > 0) {
-          collector.messageRouter.addAnalyzerIssue(
-            ExtractorMessageId.IncompatibleReleaseTags,
-            `The symbol "${astDeclaration.astSymbol.localName}"` +
-              ` is marked as ${ReleaseTag.getTagName(declarationReleaseTag)},` +
-              ` but its signature references "${localName}"` +
-              ` which is marked as ${ReleaseTag.getTagName(referencedReleaseTag)}`,
-            astDeclaration
-          );
-        }
-      } else {
+      if (ReleaseTag.compare(declarationReleaseTag, referencedReleaseTag) > 0) {
+        collector.messageRouter.addAnalyzerIssue(
+          ExtractorMessageId.IncompatibleReleaseTags,
+          `The symbol "${astDeclaration.astSymbol.localName}"` +
+            ` is marked as ${ReleaseTag.getTagName(declarationReleaseTag)},` +
+            ` but its signature references "${localName}"` +
+            ` which is marked as ${ReleaseTag.getTagName(referencedReleaseTag)}`,
+          astDeclaration
+        );
+      }
+
+      if (!collectorEntity || !collectorEntity.consumable) {
         const entryPointFilename: string = path.basename(
           collector.workingPackage.entryPointSourceFile.fileName
         );
