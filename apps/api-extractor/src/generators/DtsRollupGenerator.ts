@@ -105,6 +105,7 @@ export class DtsRollupGenerator {
     // Emit the imports
     for (const entity of collector.entities) {
       if (entity.astEntity instanceof AstImport) {
+        // BUG MITIGATION: don't trim imports based on their release tags
         const astImport: AstImport = entity.astEntity;
         DtsEmitHelpers.emitImport(writer, entity, astImport);
       }
@@ -197,6 +198,17 @@ export class DtsRollupGenerator {
             throw new InternalError(
               `Cannot find collector entity for ${entity.nameForEmit}.${exportedEntity.localName}`
             );
+          }
+
+          // If the entity's declaration won't be included, then neither should the namespace export it
+          // This fixes the issue encountered here: https://github.com/microsoft/rushstack/issues/2791
+          const exportedSymbolMetadata: SymbolMetadata | undefined =
+            collector.tryFetchMetadataForAstEntity(exportedEntity);
+          const exportedMaxEffectiveReleaseTag: ReleaseTag = exportedSymbolMetadata
+            ? exportedSymbolMetadata.maxEffectiveReleaseTag
+            : ReleaseTag.None;
+          if (!this._shouldIncludeReleaseTag(exportedMaxEffectiveReleaseTag, dtsKind)) {
+            continue;
           }
 
           if (collectorEntity.nameForEmit === exportedName) {
