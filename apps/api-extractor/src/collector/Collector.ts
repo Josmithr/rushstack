@@ -138,6 +138,7 @@ export class Collector {
 
     this._tsdocParser = new tsdoc.TSDocParser(this.extractorConfig.tsdocConfiguration);
 
+    // FLUID PATCH
     // Resolve package name patterns and store concrete set of bundled package dependency names
     this.bundledPackageNames = Collector._resolveBundledPackagePatterns(
       this.extractorConfig.bundledPackages,
@@ -156,6 +157,7 @@ export class Collector {
     this._cachedOverloadIndexesByDeclaration = new Map<AstDeclaration, number>();
   }
 
+  // FLUID PATCH
   /**
    * Searches the provided package.json for dependencies that match the provided package names and/or RegExp patterns
    * in `bundledPackages`.

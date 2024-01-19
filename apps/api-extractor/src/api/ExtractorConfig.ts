@@ -837,6 +837,7 @@ export class ExtractorConfig {
       }
 
       const bundledPackages: string[] = configObject.bundledPackages || [];
+      // FLUID PATCH
       // Note: we cannot fully validate package name pattern, as the string may be a RegExp pattern.
       // We won't know if the entries are valid until we can compare them against the package.json "dependencies" contents.
 

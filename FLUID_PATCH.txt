@@ -1,0 +1,5 @@
+The files updated:
+* src/generators/DtsRollupGenerator.ts
+* src/enhancers/ValidationEnhancer.ts
+* src/api/ExtractorConfig.ts
+* src/collector/Collector.ts

@@ -232,6 +232,7 @@ export class ValidationEnhancer {
         continue;
       }
 
+      // FLUID PATCH
       if (ReleaseTag.compare(declarationReleaseTag, referencedReleaseTag) > 0) {
         collector.messageRouter.addAnalyzerIssue(
           ExtractorMessageId.IncompatibleReleaseTags,
