@@ -939,6 +939,16 @@ importers:
         version: 5.3.3
 
   ../../build-tests/api-extractor-scenarios:
+    dependencies:
+      api-extractor-lib1-test:
+        specifier: workspace:*
+        version: link:../api-extractor-lib1-test
+      api-extractor-lib2-test:
+        specifier: workspace:*
+        version: link:../api-extractor-lib2-test
+      api-extractor-lib3-test:
+        specifier: workspace:*
+        version: link:../api-extractor-lib3-test
     devDependencies:
       '@microsoft/api-extractor':
         specifier: workspace:*
@@ -952,15 +962,6 @@ importers:
       '@rushstack/node-core-library':
         specifier: workspace:*
         version: link:../../libraries/node-core-library
-      api-extractor-lib1-test:
-        specifier: workspace:*
-        version: link:../api-extractor-lib1-test
-      api-extractor-lib2-test:
-        specifier: workspace:*
-        version: link:../api-extractor-lib2-test
-      api-extractor-lib3-test:
-        specifier: workspace:*
-        version: link:../api-extractor-lib3-test
       colors:
         specifier: ~1.2.1
         version: 1.2.5
