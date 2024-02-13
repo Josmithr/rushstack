@@ -4,6 +4,7 @@
 import * as ts from 'typescript';
 import { InternalError } from '@rushstack/node-core-library';
 
+import type { IBundledDependencyConfig } from '../api/IConfigFile';
 import { TypeScriptHelpers } from './TypeScriptHelpers';
 import { AstSymbol } from './AstSymbol';
 import { AstImport, type IAstImportOptions, AstImportKind } from './AstImport';
@@ -58,7 +59,12 @@ interface IAstModuleReference {
 export class ExportAnalyzer {
   private readonly _program: ts.Program;
   private readonly _typeChecker: ts.TypeChecker;
-  private readonly _bundledPackageNames: ReadonlySet<string>;
+
+  /**
+   * Set of bundled dependencies. Maps from the dependency name to the bundling configuration for that dependency.
+   */
+  private readonly _bundledDependencies: ReadonlyMap<string, IBundledDependencyConfig>;
+
   private readonly _astSymbolTable: IAstSymbolTable;
 
   private readonly _astModulesByModuleSymbol: Map<ts.Symbol, AstModule> = new Map<ts.Symbol, AstModule>();
@@ -72,12 +78,12 @@ export class ExportAnalyzer {
   public constructor(
     program: ts.Program,
     typeChecker: ts.TypeChecker,
-    bundledPackageNames: ReadonlySet<string>,
+    bundledDependencies: ReadonlyMap<string, IBundledDependencyConfig>,
     astSymbolTable: IAstSymbolTable
   ) {
     this._program = program;
     this._typeChecker = typeChecker;
-    this._bundledPackageNames = bundledPackageNames;
+    this._bundledDependencies = bundledDependencies;
     this._astSymbolTable = astSymbolTable;
   }
 
@@ -283,8 +289,13 @@ export class ExportAnalyzer {
 
     // Either something like `jquery` or `@microsoft/api-extractor`.
     const packageName: string | undefined = resolvedModule.packageId?.name;
-    if (packageName !== undefined && this._bundledPackageNames.has(packageName)) {
-      return false;
+    if (packageName !== undefined) {
+      // If the package is given as a bundled dependency, determine its "external" status based on the specified classification.
+      const bundledDependency: IBundledDependencyConfig | undefined =
+        this._bundledDependencies.get(packageName);
+      if (bundledDependency !== undefined) {
+        return bundledDependency.internal === true;
+      }
     }
 
     if (resolvedModule.isExternalLibraryImport === undefined) {

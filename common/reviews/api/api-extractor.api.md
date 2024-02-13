@@ -51,6 +51,7 @@ export class ExtractorConfig {
     readonly apiReportEnabled: boolean;
     readonly apiReportIncludeForgottenExports: boolean;
     readonly betaTrimmedFilePath: string;
+    readonly bundledDependencies: Record<string, IBundledDependencyConfig>;
     readonly bundledPackages: string[];
     readonly docModelEnabled: boolean;
     readonly docModelIncludeForgottenExports: boolean;
@@ -164,6 +165,11 @@ export class ExtractorResult {
 }
 
 // @public
+export interface IBundledDependencyConfig {
+    internal?: boolean;
+}
+
+// @public
 export interface ICompilerStateCreateOptions {
     additionalEntryPoints?: string[];
     typescriptCompilerFolder?: string;
@@ -206,6 +212,8 @@ export interface IConfigDtsRollup {
 // @public
 export interface IConfigFile {
     apiReport?: IConfigApiReport;
+    bundledDependencies?: Record<string, IBundledDependencyConfig>;
+    // @deprecated
     bundledPackages?: string[];
     compiler?: IConfigCompiler;
     docModel?: IConfigDocModel;

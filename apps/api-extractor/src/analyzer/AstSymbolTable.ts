@@ -6,6 +6,7 @@
 import * as ts from 'typescript';
 import { type PackageJsonLookup, InternalError } from '@rushstack/node-core-library';
 
+import type { IBundledDependencyConfig } from '../api/IConfigFile';
 import { AstDeclaration } from './AstDeclaration';
 import { TypeScriptHelpers } from './TypeScriptHelpers';
 import { AstSymbol } from './AstSymbol';
@@ -97,7 +98,7 @@ export class AstSymbolTable {
     program: ts.Program,
     typeChecker: ts.TypeChecker,
     packageJsonLookup: PackageJsonLookup,
-    bundledPackageNames: ReadonlySet<string>,
+    bundledDependencies: ReadonlyMap<string, IBundledDependencyConfig>,
     messageRouter: MessageRouter
   ) {
     this._program = program;
@@ -106,7 +107,7 @@ export class AstSymbolTable {
     this._globalVariableAnalyzer = TypeScriptInternals.getGlobalVariableAnalyzer(program);
     this._packageMetadataManager = new PackageMetadataManager(packageJsonLookup, messageRouter);
 
-    this._exportAnalyzer = new ExportAnalyzer(this._program, this._typeChecker, bundledPackageNames, {
+    this._exportAnalyzer = new ExportAnalyzer(this._program, this._typeChecker, bundledDependencies, {
       analyze: this.analyze.bind(this),
       fetchAstSymbol: this._fetchAstSymbol.bind(this)
     });

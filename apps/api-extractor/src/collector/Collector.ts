@@ -24,6 +24,7 @@ import { TypeScriptInternals, type IGlobalVariableAnalyzer } from '../analyzer/T
 import type { MessageRouter } from './MessageRouter';
 import { AstReferenceResolver } from '../analyzer/AstReferenceResolver';
 import { ExtractorConfig } from '../api/ExtractorConfig';
+import type { IBundledDependencyConfig } from '../api/IConfigFile';
 import { AstNamespaceImport } from '../analyzer/AstNamespaceImport';
 import { AstImport } from '../analyzer/AstImport';
 import type { SourceMapper } from './SourceMapper';
@@ -74,7 +75,7 @@ export class Collector {
   /**
    * The `ExtractorConfig.bundledPackages` names in a set.
    */
-  public readonly bundledPackageNames: ReadonlySet<string>;
+  public readonly bundledPackageDependencies: ReadonlyMap<string, IBundledDependencyConfig>;
 
   private readonly _program: ts.Program;
 
@@ -132,18 +133,43 @@ export class Collector {
 
     this._tsdocParser = new tsdoc.TSDocParser(this.extractorConfig.tsdocConfiguration);
 
-    this.bundledPackageNames = new Set<string>(this.extractorConfig.bundledPackages);
+    this.bundledPackageDependencies = Collector._buildBundledDependenciesMap(this.extractorConfig);
 
     this.astSymbolTable = new AstSymbolTable(
       this.program,
       this.typeChecker,
       this.packageJsonLookup,
-      this.bundledPackageNames,
+      this.bundledPackageDependencies,
       this.messageRouter
     );
     this.astReferenceResolver = new AstReferenceResolver(this);
 
     this._cachedOverloadIndexesByDeclaration = new Map<AstDeclaration, number>();
+  }
+
+  private static _buildBundledDependenciesMap(
+    extractorConfig: ExtractorConfig
+  ): Map<string, IBundledDependencyConfig> {
+    const bundledDependenciesMap: Map<string, IBundledDependencyConfig> = new Map<
+      string,
+      IBundledDependencyConfig
+    >();
+
+    if (extractorConfig.bundledPackages !== undefined) {
+      for (const bundledPackageName of extractorConfig.bundledPackages) {
+        bundledDependenciesMap.set(bundledPackageName, { internal: false }); // TODO: confirm and document
+      }
+    }
+
+    if (extractorConfig.bundledDependencies !== undefined) {
+      for (const [bundledDependencyName, bundledDependencyConfig] of Object.entries(
+        extractorConfig.bundledDependencies
+      )) {
+        bundledDependenciesMap.set(bundledDependencyName, bundledDependencyConfig);
+      }
+    }
+
+    return bundledDependenciesMap;
   }
 
   /**

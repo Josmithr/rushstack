@@ -18,7 +18,7 @@ import {
 } from '@rushstack/node-core-library';
 import { type IRigConfig, RigConfig } from '@rushstack/rig-package';
 
-import type { IConfigFile, IExtractorMessagesConfig } from './IConfigFile';
+import type { IBundledDependencyConfig, IConfigFile, IExtractorMessagesConfig } from './IConfigFile';
 import { PackageMetadataManager } from '../analyzer/PackageMetadataManager';
 import { MessageRouter } from '../collector/MessageRouter';
 import { EnumMemberOrder } from '@microsoft/api-extractor-model';
@@ -153,7 +153,9 @@ interface IExtractorConfigParameters {
   packageJson: INodePackageJson | undefined;
   packageFolder: string | undefined;
   mainEntryPointFilePath: string;
+  /** @deprecated Replaced by `bundledDependencies` */
   bundledPackages: string[];
+  bundledDependencies: Record<string, IBundledDependencyConfig>;
   tsconfigFilePath: string;
   overrideTsconfig: {} | undefined;
   skipLibCheck: boolean;
@@ -234,6 +236,9 @@ export class ExtractorConfig {
   /** {@inheritDoc IConfigFile.bundledPackages} */
   public readonly bundledPackages: string[];
 
+  /** {@inheritDoc IConfigFile.bundledPackages} */
+  public readonly bundledDependencies: Record<string, IBundledDependencyConfig>;
+
   /** {@inheritDoc IConfigCompiler.tsconfigFilePath} */
   public readonly tsconfigFilePath: string;
 
@@ -311,6 +316,7 @@ export class ExtractorConfig {
     this.packageFolder = parameters.packageFolder;
     this.mainEntryPointFilePath = parameters.mainEntryPointFilePath;
     this.bundledPackages = parameters.bundledPackages;
+    this.bundledDependencies = parameters.bundledDependencies;
     this.tsconfigFilePath = parameters.tsconfigFilePath;
     this.overrideTsconfig = parameters.overrideTsconfig;
     this.skipLibCheck = parameters.skipLibCheck;
@@ -843,6 +849,10 @@ export class ExtractorConfig {
         }
       }
 
+      const bundledDependencies: Record<string, IBundledDependencyConfig> =
+        configObject.bundledDependencies || {};
+      // TODO: note that validation cannot be done here due to potential wildcards
+
       const tsconfigFilePath: string = ExtractorConfig._resolvePathWithTokens(
         'tsconfigFilePath',
         configObject.compiler.tsconfigFilePath,
@@ -1006,6 +1016,7 @@ export class ExtractorConfig {
         packageFolder,
         mainEntryPointFilePath,
         bundledPackages,
+        bundledDependencies,
         tsconfigFilePath,
         overrideTsconfig: configObject.compiler.overrideTsconfig,
         skipLibCheck: !!configObject.compiler.skipLibCheck,

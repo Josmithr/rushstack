@@ -326,6 +326,22 @@ export interface IExtractorMessagesConfig {
 }
 
 /**
+ * A "bundled" dependency.
+ *
+ * TODO: elaborate.
+ */
+export interface IBundledDependencyConfig {
+  /**
+   * Whether or not the dependency is internal to the project.
+   *
+   * TODO: elaborate
+   *
+   * @defaultValue `false`
+   */
+  internal?: boolean;
+}
+
+/**
  * Configuration options for the API Extractor tool.  These options can be constructed programmatically
  * or loaded from the api-extractor.json config file using the {@link ExtractorConfig} class.
  *
@@ -390,8 +406,15 @@ export interface IConfigFile {
    *
    * This would direct API Extractor to embed those types directly in the .d.ts rollup, as if they had been
    * local files for `library1`.
+   *
+   * @deprecated `bundledPackages` is deprecated. Use `bundledDependencies` instead.
    */
   bundledPackages?: string[];
+
+  /**
+   * TODO
+   */
+  bundledDependencies?: Record<string, IBundledDependencyConfig>;
 
   /**
    * Specifies what type of newlines API Extractor should use when writing output files.

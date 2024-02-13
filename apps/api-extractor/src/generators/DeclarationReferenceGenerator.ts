@@ -366,7 +366,7 @@ export class DeclarationReferenceGenerator {
     if (sourceFile && ts.isExternalModule(sourceFile)) {
       const packageName: string = this._getPackageName(sourceFile);
 
-      if (this._collector.bundledPackageNames.has(packageName)) {
+      if (this._collector.bundledPackageDependencies.has(packageName)) {
         // The api-extractor.json config file has a "bundledPackages" setting, which causes imports from
         // certain NPM packages to be treated as part of the working project.  In this case, we need to
         // substitute the working package name.

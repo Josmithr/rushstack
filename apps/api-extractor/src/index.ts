@@ -32,6 +32,7 @@ export {
 export { ExtractorMessageId } from './api/ExtractorMessageId';
 
 export {
+  IBundledDependencyConfig,
   IConfigCompiler,
   IConfigApiReport,
   IConfigDocModel,
