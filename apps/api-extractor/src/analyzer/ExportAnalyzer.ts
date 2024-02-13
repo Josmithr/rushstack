@@ -259,7 +259,7 @@ export class ExportAnalyzer {
 
   /**
    * Returns true if the module specifier refers to an external package.  Ignores packages listed in the
-   * "bundledPackages" setting from the api-extractor.json config file.
+   * "bundledDependencies" and "bundledPackages" (deprecated) settings from the api-extractor.json config file.
    */
   private _isExternalModulePath(
     importOrExportDeclaration: ts.ImportDeclaration | ts.ExportDeclaration | ts.ImportTypeNode,
@@ -289,13 +289,8 @@ export class ExportAnalyzer {
 
     // Either something like `jquery` or `@microsoft/api-extractor`.
     const packageName: string | undefined = resolvedModule.packageId?.name;
-    if (packageName !== undefined) {
-      // If the package is given as a bundled dependency, determine its "external" status based on the specified classification.
-      const bundledDependency: IBundledDependencyConfig | undefined =
-        this._bundledDependencies.get(packageName);
-      if (bundledDependency !== undefined) {
-        return bundledDependency.internal === true;
-      }
+    if (packageName !== undefined && this._bundledDependencies.has(packageName)) {
+      return false;
     }
 
     if (resolvedModule.isExternalLibraryImport === undefined) {
