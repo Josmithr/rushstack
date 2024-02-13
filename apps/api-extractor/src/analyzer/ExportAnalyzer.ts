@@ -134,7 +134,7 @@ export class ExportAnalyzer {
           if (arbitraryDeclaration) {
             const astSymbol: AstSymbol | undefined = this._astSymbolTable.fetchAstSymbol({
               followedSymbol: followedSymbol,
-              isExternal: astModule.isExternal,
+              isExternal: astModule.isExternal, // TODO: should this account for bundledDependencies?
               includeNominalAnalysis: true,
               addIfMissing: true
             });
