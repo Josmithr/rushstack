@@ -161,6 +161,7 @@ interface IExtractorConfigParameters {
   reportFilePath: string;
   reportTempFilePath: string;
   apiReportIncludeForgottenExports: boolean;
+  treatAllInternalItemsAsPreapproved: boolean;
   docModelEnabled: boolean;
   apiJsonFilePath: string;
   docModelIncludeForgottenExports: boolean;
@@ -252,6 +253,8 @@ export class ExtractorConfig {
   public readonly reportTempFilePath: string;
   /** {@inheritDoc IConfigApiReport.includeForgottenExports} */
   public readonly apiReportIncludeForgottenExports: boolean;
+  /** {@inheritDoc IConfigApiReport.treatAllInternalItemsAsPreapproved} */
+  public readonly treatAllInternalItemsAsPreapproved: boolean;
 
   /** {@inheritDoc IConfigDocModel.enabled} */
   public readonly docModelEnabled: boolean;
@@ -318,6 +321,7 @@ export class ExtractorConfig {
     this.reportFilePath = parameters.reportFilePath;
     this.reportTempFilePath = parameters.reportTempFilePath;
     this.apiReportIncludeForgottenExports = parameters.apiReportIncludeForgottenExports;
+    this.treatAllInternalItemsAsPreapproved = parameters.treatAllInternalItemsAsPreapproved;
     this.docModelEnabled = parameters.docModelEnabled;
     this.apiJsonFilePath = parameters.apiJsonFilePath;
     this.docModelIncludeForgottenExports = parameters.docModelIncludeForgottenExports;
@@ -862,6 +866,7 @@ export class ExtractorConfig {
       let reportFilePath: string = '';
       let reportTempFilePath: string = '';
       let apiReportIncludeForgottenExports: boolean = false;
+      let treatAllInternalItemsAsPreapproved: boolean = false;
       if (configObject.apiReport) {
         apiReportEnabled = !!configObject.apiReport.enabled;
 
@@ -894,6 +899,7 @@ export class ExtractorConfig {
         reportFilePath = path.join(reportFolder, reportFilename);
         reportTempFilePath = path.join(reportTempFolder, reportFilename);
         apiReportIncludeForgottenExports = !!configObject.apiReport.includeForgottenExports;
+        treatAllInternalItemsAsPreapproved = !!configObject.apiReport.treatAllInternalItemsAsPreapproved;
       }
 
       let docModelEnabled: boolean = false;
@@ -1013,6 +1019,7 @@ export class ExtractorConfig {
         reportFilePath,
         reportTempFilePath,
         apiReportIncludeForgottenExports,
+        treatAllInternalItemsAsPreapproved,
         docModelEnabled,
         apiJsonFilePath,
         docModelIncludeForgottenExports,

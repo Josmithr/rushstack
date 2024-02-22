@@ -19,7 +19,8 @@
     "reportFileName": "<unscopedPackageName>.api.md",
     "reportFolder": "<projectFolder>/etc/",
     "reportTempFolder": "<projectFolder>/temp/",
-    "includeForgottenExports": false
+    "includeForgottenExports": false,
+    "treatAllInternalItemsAsPreapproved": false
   },
 
   "docModel": {

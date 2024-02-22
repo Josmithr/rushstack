@@ -186,6 +186,14 @@
      * DEFAULT VALUE: "false"
      */
     // "includeForgottenExports": false
+
+    /**
+     * If enabled, all `@internal` API items will be treated as "pre-approved", meaning they will not appear in the
+     * generated API report.
+     *
+     * DEFAULT VALUE: "false"
+     */
+    // "treatAllInternalItemsAsPreapproved": false
   },
 
   /**

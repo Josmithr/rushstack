@@ -107,6 +107,14 @@ export interface IConfigApiReport {
    * @defaultValue `false`
    */
   includeForgottenExports?: boolean;
+
+  /**
+   * If enabled, all `@internal` API items will be treated as "pre-approved", meaning they will not appear in the
+   * generated API report.
+   *
+   * @defaultValue `false`
+   */
+  treatAllInternalItemsAsPreapproved?: boolean;
 }
 
 /**

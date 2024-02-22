@@ -780,11 +780,18 @@ export class Collector {
       }
 
       options.declaredReleaseTag = declaredReleaseTag;
-
       options.isEventProperty = modifierTagSet.isEventProperty();
       options.isOverride = modifierTagSet.isOverride();
       options.isSealed = modifierTagSet.isSealed();
       options.isVirtual = modifierTagSet.isVirtual();
+
+      // If the user has configured the extractor to treat all internal items as preapproved, then we
+      // will mark the item as `preApproved` by default.
+      // We will still do our default tag validation below.
+      options.isPreapproved =
+        this.extractorConfig.treatAllInternalItemsAsPreapproved === true &&
+        declaredReleaseTag === ReleaseTag.Internal;
+
       const preapprovedTag: tsdoc.TSDocTagDefinition | void =
         this.extractorConfig.tsdocConfiguration.tryGetTagDefinition('@preapproved');
 

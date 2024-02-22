@@ -79,6 +79,7 @@ export class ExtractorConfig {
     readonly rollupEnabled: boolean;
     readonly skipLibCheck: boolean;
     readonly testMode: boolean;
+    readonly treatAllInternalItemsAsPreapproved: boolean;
     static tryLoadForFolder(options: IExtractorConfigLoadForFolderOptions): IExtractorConfigPrepareOptions | undefined;
     readonly tsconfigFilePath: string;
     // @internal
@@ -176,6 +177,7 @@ export interface IConfigApiReport {
     reportFileName?: string;
     reportFolder?: string;
     reportTempFolder?: string;
+    treatAllInternalItemsAsPreapproved?: boolean;
 }
 
 // @public
