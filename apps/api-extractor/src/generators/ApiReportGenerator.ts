@@ -83,12 +83,14 @@ export class ApiReportGenerator {
     writer.ensureSkippedLine();
 
     // Emit the imports
-    for (const entity of collector.entities) {
-      if (entity.astEntity instanceof AstImport) {
-        DtsEmitHelpers.emitImport(writer, entity, entity.astEntity);
+    if (collector.extractorConfig.apiReportIncludeImports) {
+      for (const entity of collector.entities) {
+        if (entity.astEntity instanceof AstImport) {
+          DtsEmitHelpers.emitImport(writer, entity, entity.astEntity);
+        }
       }
+      writer.ensureSkippedLine();
     }
-    writer.ensureSkippedLine();
 
     // Emit the regular declarations
     for (const entity of collector.entities) {

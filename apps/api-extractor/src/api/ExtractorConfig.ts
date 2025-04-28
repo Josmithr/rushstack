@@ -206,6 +206,8 @@ interface IExtractorConfigParameters {
   reportFolder: string;
   reportTempFolder: string;
   apiReportIncludeForgottenExports: boolean;
+  /** {@inheritDoc IConfigApiReport.includeImports */
+  apiReportIncludeImports: boolean;
   tagsToReport: Readonly<Record<`@${string}`, boolean>>;
   docModelGenerationOptions: IApiModelGenerationOptions | undefined;
   apiJsonFilePath: string;
@@ -328,6 +330,9 @@ export class ExtractorConfig {
   /** {@inheritDoc IConfigApiReport.includeForgottenExports} */
   public readonly apiReportIncludeForgottenExports: boolean;
 
+  /** {@inheritDoc IConfigApiReport.includeImports} */
+  public readonly apiReportIncludeImports: boolean;
+
   /**
    * If specified, the doc model is enabled and the specified options will be used.
    * @beta
@@ -394,6 +399,7 @@ export class ExtractorConfig {
     skipLibCheck,
     apiReportEnabled,
     apiReportIncludeForgottenExports,
+    apiReportIncludeImports,
     reportConfigs,
     reportFolder,
     reportTempFolder,
@@ -427,6 +433,7 @@ export class ExtractorConfig {
     this.skipLibCheck = skipLibCheck;
     this.apiReportEnabled = apiReportEnabled;
     this.apiReportIncludeForgottenExports = apiReportIncludeForgottenExports;
+    this.apiReportIncludeImports = apiReportIncludeImports;
     this.reportConfigs = reportConfigs;
     this.reportFolder = reportFolder;
     this.reportTempFolder = reportTempFolder;
@@ -991,6 +998,7 @@ export class ExtractorConfig {
       const apiReportEnabled: boolean = configObject.apiReport?.enabled ?? false;
       const apiReportIncludeForgottenExports: boolean =
         configObject.apiReport?.includeForgottenExports ?? false;
+      const apiReportIncludeImports: boolean = configObject.apiReport?.includeImports ?? true;
       let reportFolder: string = tokenContext.projectFolder;
       let reportTempFolder: string = tokenContext.projectFolder;
       const reportConfigs: IExtractorConfigApiReport[] = [];
@@ -1223,6 +1231,7 @@ export class ExtractorConfig {
         reportFolder,
         reportTempFolder,
         apiReportIncludeForgottenExports,
+        apiReportIncludeImports,
         tagsToReport,
         docModelGenerationOptions,
         apiJsonFilePath,

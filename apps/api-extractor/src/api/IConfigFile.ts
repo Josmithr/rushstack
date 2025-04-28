@@ -141,6 +141,21 @@ export interface IConfigApiReport {
   includeForgottenExports?: boolean;
 
   /**
+   * Whether or not to include import statements in the API report file.
+   * Set to `false` to omit imports from the API report file.
+   *
+   * @remarks
+   * By default, API Extractor will include the list of imports from external libraries referenced by the package's exports at the top of the API report.
+   * This list is representative of the imports that will appear in the corresponding generated .d.ts file.
+   *
+   * Note: these imports do not account for trimming based on release tags.
+   * This matches API Extractor's current behavior in the .d.ts files it generates.
+   *
+   * @defaultValue `true`
+   */
+  includeImports?: boolean;
+
+  /**
    * Specifies a list of {@link https://tsdoc.org/ | TSDoc} tags that should be reported in the API report file for
    * items whose documentation contains them.
    *
